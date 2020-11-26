@@ -9,4 +9,9 @@ class Post extends Model
 {
     use HasFactory;
     protected $guarded=[];
+    // protected $fillable=['name','description'];
+    public function categories()
+    {
+        return $this->belongsTo('App\Models\Category','category_id');
+    }
 }
