@@ -28,6 +28,14 @@
                     <label for="description">Description</label>
                         <textarea  class="form-control" name="description" rows="3">{{ $post->description }}</textarea>
                   </div>
+                   <div class="form-group">
+                   <select class="form-control" name="category_id" id="">
+                      <option value="">Select Category</option>
+                      @foreach ($category as $data)
+                           <option value="{{ $data->id }}" {{ $data->id==$post->category_id ? 'selected' : '' }}>{{ $data->name }}</option>
+                      @endforeach
+                    </select>
+                   </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <a href="/posts" class="btn btn-success">Back</a>
               </form>

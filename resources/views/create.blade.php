@@ -28,6 +28,15 @@
                     <label for="description">Description</label>
                     <textarea  class="form-control" name="description" rows="3"></textarea>
                   </div>
+                
+                    <select class="form-control" name="category_id" id="">
+                      <option value="">Select Category</option>
+                      @foreach ($category as $data)
+                           <option value="{{ $data->id }}">{{ $data->name }}</option>
+                      @endforeach
+                   
+                    </select>
+                 
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <a href="/posts" class="btn btn-success">Back</a>
               </form>

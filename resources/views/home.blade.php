@@ -4,6 +4,8 @@
 <div class="container">
     <div>
         <a href="/posts/create" class="btn btn-success">New Post</a>
+        <a href="logout" class="btn btn-primary">Logout</a>
+       
     </div>
     <div class="card">
         <div class="card-header" style="text-align: center">

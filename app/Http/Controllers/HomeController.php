@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\storePostRequest;
 
 class HomeController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth')->except('index','create');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +31,8 @@ class HomeController extends Controller
      */
     public function create()
     {
-        return view('create');
+        $category = Category::all();
+        return view('create',compact('category'));
     }
 
     /**
@@ -38,7 +43,9 @@ class HomeController extends Controller
      */
     public function store(storePostRequest $request ,Post $post)
     {
-        //$validated = $request->validated();
+        $validated = $request->validated();
+       Post::create($validated);
+
         // $request->validate([
         //     'name' => 'required|unique:posts|max:255',
         //     'description' => 'required|max:255',
@@ -47,10 +54,11 @@ class HomeController extends Controller
         // $post->name = $request->name;
         // $post->description = $request->description;
         // $post->save();
-        Post::create([
-            'name'=>$request->name,
-            'description'=>$request->description
-        ]);
+        // Post::create([
+        //     'name'=>$request->name,
+        //     'description'=>$request->description,
+        //     'category_id'=>$request->category
+        // ]);
         return redirect('/posts');
     }
 
@@ -62,7 +70,6 @@ class HomeController extends Controller
      */
     public function show(Post $post)
     {
-    
         // $data = Post::find($id);
         return view('show',compact('post'));
     }
@@ -76,7 +83,8 @@ class HomeController extends Controller
     public function edit(Post $post)
     {
         // $post = Post::findOrFail($id);
-        return view('edit',compact('post'));
+       $category = Category::all();
+        return view('edit',compact('post','category'));
         
     }
 
