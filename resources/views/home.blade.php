@@ -4,7 +4,8 @@
 <div class="container">
     <div>
         <a href="/posts/create" class="btn btn-success">New Post</a>
-        <a href="logout" class="btn btn-primary">Logout</a>
+        <a href="/logout" class="btn btn-primary">Logout</a>
+        <p class="float-right">{{ Auth::user()->name }}</p>
        
     </div>
     <div class="card">
