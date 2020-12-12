@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Test;
 use App\Models\Post;
+use App\Mail\PostStore;
 use App\Models\Category;
+use App\Mail\PostCreated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\storePostRequest;
 
 class HomeController extends Controller
@@ -17,11 +22,15 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // dd(auth()->user());
+        // Mail::raw('Hello World', function ($message) {
+        //     $message->to('coco@gmail.com')->subject('AP laravel class');
+        // });
+        // dd(Post::pluck('name'));
+        // dd(config('ap.class.third'));//Creae Config
         $data = Post::where('user_id',auth()->id())->orderBy('id','desc')->get();
-    
+        // $request->session()->flash('status', 'Task was successful!');
         return view('home',compact('data'));
     }
 
@@ -45,8 +54,8 @@ class HomeController extends Controller
     public function store(storePostRequest $request ,Post $post)
     {
         $validated = $request->validated();
-       Post::create($validated);
-
+       Post::create($validated + ['user_id'=>Auth::user()->id]);
+        // Mail::to('coco@gmail.com')->send(new PostCreated(  ));
         // $request->validate([
         //     'name' => 'required|unique:posts|max:255',
         //     'description' => 'required|max:255',
@@ -60,7 +69,7 @@ class HomeController extends Controller
         //     'description'=>$request->description,
         //     'category_id'=>$request->category
         // ]);
-        return redirect('/posts');
+        return redirect('/posts')->with('status',config('ap.message.created'));
     }
 
     /**
@@ -69,7 +78,7 @@ class HomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show(Post $post,Test $test)
     {
         // $data = Post::find($id);
 
@@ -116,7 +125,7 @@ class HomeController extends Controller
             'name'=>$request->name,
             'description'=>$request->description,
         ]);
-        return redirect('/posts');
+        return redirect('/posts')->with('status','Post Successfull Updated');;
     }
 
     /**
