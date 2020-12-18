@@ -39,3 +39,7 @@ Route::get('/',function(){
 Route::resource('posts',HomeController::class)->middleware(['auth']);
 Route::get('logout',[AuthController::class,'logout']);
 
+
+Route::get('/',function(){
+    return view('welcome');
+});

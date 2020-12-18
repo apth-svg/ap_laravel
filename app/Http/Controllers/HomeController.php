@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Test;
 use App\Models\Post;
+use App\Models\User;
 use App\Mail\PostStore;
 use App\Models\Category;
 use App\Mail\PostCreated;
 use Illuminate\Http\Request;
+use App\Events\PostCreatedEvent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\storePostRequest;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\PostCreatedNotification;
 
 class HomeController extends Controller
 {
@@ -29,6 +33,13 @@ class HomeController extends Controller
         // });
         // dd(Post::pluck('name'));
         // dd(config('ap.class.third'));//Creae Config
+
+        //Notification Sample
+        // $user =User::find(1);
+        // $user->notify( new  PostCreatedNotification());
+        // Notification::send(, new  PostCreatedNotification());
+        // echo 'noti send';exit();
+
         $data = Post::where('user_id',auth()->id())->orderBy('id','desc')->get();
         // $request->session()->flash('status', 'Task was successful!');
         return view('home',compact('data'));
@@ -54,7 +65,8 @@ class HomeController extends Controller
     public function store(storePostRequest $request ,Post $post)
     {
         $validated = $request->validated();
-       Post::create($validated + ['user_id'=>Auth::user()->id]);
+       $post = Post::create($validated + ['user_id'=>Auth::user()->id]);
+       event(new PostCreatedEvent(  $post ));
         // Mail::to('coco@gmail.com')->send(new PostCreated(  ));
         // $request->validate([
         //     'name' => 'required|unique:posts|max:255',
